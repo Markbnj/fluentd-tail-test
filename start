@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+writers=2
+run_seconds=1
+write_delay=5
+output_type=file
+output_path=srclogs
+output_arg=
+
+if [ "$output_type" == "file" ]; then
+  if [ ! -d $output_path ]; then
+    mkdir $output_path
+  elif [ ! -z "$(ls -A $output_path)" ]; then
+    rm $output_path/*
+  fi
+  output_arg="-o $output_type -p $output_path"
+else
+  output_arg="-o $output_type"
+fi
+python3 bin/test_runner.py -n $writers -r $run_seconds -w $write_delay $output_arg
