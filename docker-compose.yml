@@ -1,0 +1,20 @@
+version: "3.2"
+
+networks:
+  fluent-test:
+
+services:
+  fluentd:
+    image: fluent/fluentd:v1.10.4-debian-1.0
+    container_name: fluentd
+    ports:
+    - "24224:24224"
+    networks:
+    - fluent-test
+    volumes:
+    - ./srclogs:/srclogs
+    - ./outlogs:/outlogs
+    - ./pos:/pos
+    - type: bind
+      source: ./conf/fluent.conf
+      target: /fluentd/etc/fluent.conf
