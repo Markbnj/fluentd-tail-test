@@ -32,12 +32,10 @@ def write_logs(run_for, write_delay, id, output_type, path):
 
 
 def run_test(num_writers, run_for, write_delay, output_type, path):
-  writers=[]
   for i in range(num_writers):
     p = Process(target=write_logs, args=(run_for,write_delay,i,output_type,path))
     p.start()
     p.join()
-    writers.append(p)
 
 
 if __name__ == "__main__":
