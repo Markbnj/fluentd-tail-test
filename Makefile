@@ -18,8 +18,12 @@ fluent_db_path := pos
 		rm -f $fluent_db_path/*;\
 	fi
 
+.PHONY: .build-fluentd
+.build-fluentd:
+	docker build -f Dockerfile.fluentd --rm --force-rm --tag fluentd:v1.10.4-debian-1.0-prom .
+
 .PHONY: start
-start: .setup
+start: .build-fluentd .setup
 	docker-compose up -d
 
 .PHONY: stop
