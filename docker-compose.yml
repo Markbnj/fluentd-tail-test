@@ -9,33 +9,36 @@ services:
     container_name: cadvisor
     ports:
     - 8080:8080
+    networks:
+    - fluent-test
     volumes:
     - /:/rootfs:ro
     - /var/run:/var/run:rw
     - /sys:/sys:ro
     - /var/lib/docker/:/var/lib/docker:ro
+  fluentd:
+    image: fluentd:v1.10.4-debian-1.0-prom
+    container_name: fluentd
+    ports:
+    - 24224:24224
+    - 8000:8000
+    networks:
+    - fluent-test
+    volumes:
+    - ./srclogs:/srclogs:ro
+    - ./pos:/pos
+    - ./conf/fluent.conf:/fluentd/etc/fluent.conf:ro
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
     ports:
     - 9090:9090
+    networks:
+    - fluent-test
     command:
     - --config.file=/etc/prometheus/prometheus.yml
     volumes:
     - ./conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro
     depends_on:
     - cadvisor
-  fluentd:
-    image: fluent/fluentd:v1.10.4-debian-1.0
-    container_name: fluentd
-    ports:
-    - "24224:24224"
-    networks:
-    - fluent-test
-    volumes:
-    - ./srclogs:/srclogs:ro
-    - ./outlogs:/outlogs
-    - ./pos:/pos
-    - ./conf/fluent.conf:/fluentd/etc/fluent.conf:ro
-    depends_on:
-    - cadvisor
+    - fluentd
