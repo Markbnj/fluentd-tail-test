@@ -1,7 +1,7 @@
 apiVersion: 1
 providers:
 - name: default
-  folder: default
+  folder: General
   disableDeletion: true
   type: file
   options:
