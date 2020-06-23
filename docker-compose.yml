@@ -42,3 +42,15 @@ services:
     depends_on:
     - cadvisor
     - fluentd
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+    - 3000:3000
+    networks:
+    - fluent-test
+    volumes:
+    - ./conf/grafana.ini:/etc/grafana/grafana.ini
+    - ./grafana:/etc/grafana/provisioning
+    depends_on:
+    - prometheus
