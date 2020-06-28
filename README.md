@@ -4,9 +4,9 @@ Provides a framework for testing the cpu/memory utilization of [fluentd](https:/
 
 ## Use
 
-`make start` - builds a fluentd image with the prometheus plugin, then launches cadvisor, fluentd, prometheus and grafana.
-`make run-logs` - spawns log writers
-`make stop` - shuts down all containers
+ - `make start` - builds a fluentd image with the prometheus plugin, then launches cadvisor, fluentd, prometheus and grafana.
+ - `make run-logs` - spawns log writers
+ - `make stop` - shuts down all containers
 
 ### Web stuff
 
