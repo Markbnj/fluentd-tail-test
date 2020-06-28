@@ -32,4 +32,4 @@ stop:
 
 .PHONY: run-logs
 run-logs:
-	python3 bin/test_runner.py --num-writers 10 --run-for 300 --write-delay 1500 --output-type file --path srclogs
+	python3 bin/test_runner.py --num-writers 1 --run-for 300 --write-delay 1500 --output-type file --path srclogs

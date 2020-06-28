@@ -1,6 +1,6 @@
 # fluentd-tail-test
 
-Provides a framework for testing the cpu/memory utilization of fluentd in a typical kubernetes cluster logging scenario where some number of containers are logging to stdout, which containerd is redirecting to a file that is symlinked in /var/log/containers. Fluentd is configured to tail log files and discard all records so we can focus on the costs of acquiring the lines. CAdvisor is installed to monitor the fluentd container resource usage. Prometheus is installed to scrape usage metrics from cadvisor. Grafana is installed to visualize the data in prometheus.
+Provides a framework for testing the cpu/memory utilization of [fluentd](https://www.fluentd.org/) in a typical kubernetes cluster logging scenario where some number of containers are logging to stdout, which containerd is redirecting to a file that is symlinked in /var/log/containers. Fluentd is configured to tail log files and discard all records so we can focus on the costs of acquiring the lines. CAdvisor is installed to monitor the fluentd container resource usage. Prometheus is installed to scrape usage metrics from cadvisor. Grafana is installed to visualize the data in prometheus.
 
 ## Use
 
