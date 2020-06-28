@@ -16,7 +16,7 @@ def write_logs(run_for, write_delay, id, output_type, path):
     log_name = f"test-log-{id}.log"
     base_path = Path(path)
     log_path = base_path / log_name
-    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=10000000)
+    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=5000000, backupCount=5)
   elif output_type == 'network':
     raise Exception("Not implemented")
   else:
