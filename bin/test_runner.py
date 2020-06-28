@@ -21,7 +21,7 @@ def write_logs(lines, write_delay, id, output_type, path):
   else:
     raise Exception("Unknown output type")
 
-  handler.setFormatter(logging.Formatter('%(asctime)s %(message)s'))
+  handler.setFormatter(logging.Formatter('{"time":"%(asctime)s","log":"%(message)s"}'))
   logger.addHandler(handler)
 
   line_count = 0;
