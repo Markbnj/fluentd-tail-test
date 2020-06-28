@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 import logging
+import logging.handlers
 import time
 from multiprocessing import Process
 import os
@@ -15,7 +16,7 @@ def write_logs(run_for, write_delay, id, output_type, path):
     log_name = f"test-log-{id}.log"
     base_path = Path(path)
     log_path = base_path / log_name
-    handler = logging.FileHandler(log_path)
+    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=10000000)
   elif output_type == 'network':
     raise Exception("Not implemented")
   else:
@@ -32,14 +33,19 @@ def write_logs(run_for, write_delay, id, output_type, path):
     if time.time() - start_s > run_for:
       break
     time.sleep(write_delay / 1000000)
+
   ran_for = time.time() - start_s
   print(f'writer {os.getpid()} exiting; wrote {line_count} lines in {ran_for} seconds.')
 
+
 def run_test(num_writers, run_for, write_delay, output_type, path):
+  procs = []
   for i in range(num_writers):
     p = Process(target=write_logs, args=(run_for,write_delay,i,output_type,path))
     p.start()
-    p.join()
+    procs.append(p)
+  while [p.exitcode for p in procs if p.exitcode is None]:
+    time.sleep(2)
 
 
 if __name__ == "__main__":
