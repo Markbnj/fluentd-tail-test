@@ -160,7 +160,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(container_cpu_usage_seconds_total{name=\"fluentd\"}[5m]))*100",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{name=\"fluentd\"}[10s]))*100",
           "interval": "",
           "legendFormat": "%CPU ",
           "refId": "A"
