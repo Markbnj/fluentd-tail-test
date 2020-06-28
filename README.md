@@ -14,6 +14,6 @@ After start the following things are available on localhost:
 
  - [CAdvisor](http://localhost:8080)
  - [Prometheus](http://localhost:9090)
- - [Grafana](fluentt:fluent@http://localhost:3000/login)
+ - [Grafana](http://localhost:3000/login) (user:fluent password:fluent)
 
 For the purposes of these tests only grafana is of immediate use. It includes a provisioned dashboard that tracks fluentd container cpu use, memory and total records processed.
