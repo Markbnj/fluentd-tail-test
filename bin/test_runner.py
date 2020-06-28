@@ -3,6 +3,7 @@ from pathlib import Path
 import logging
 import time
 from multiprocessing import Process
+import os
 
 
 def write_logs(run_for, write_delay, id, output_type, path):
@@ -24,12 +25,15 @@ def write_logs(run_for, write_delay, id, output_type, path):
   logger.addHandler(handler)
 
   start_s = time.time()
+  line_count = 0
   while True:
     logger.debug('This is a test log line; no actual event has occurred')
+    line_count = line_count + 1
     if time.time() - start_s > run_for:
       break
     time.sleep(write_delay / 1000000)
-
+  ran_for = time.time() - start_s
+  print(f'writer {os.getpid()} exiting; wrote {line_count} lines in {ran_for} seconds.')
 
 def run_test(num_writers, run_for, write_delay, output_type, path):
   for i in range(num_writers):
@@ -47,5 +51,5 @@ if __name__ == "__main__":
   parser.add_argument('-p', '--path', default='srclogs', help='Path where logs are written.')
 
   args = parser.parse_args()
-  print(args)
+  print(f'spawning log writers with args: {args}')
   run_test(args.num_writers, args.run_for, args.write_delay, args.output_type, args.path )
