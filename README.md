@@ -12,8 +12,8 @@ Provides a framework for testing the cpu/memory utilization of [fluentd](https:/
 
 After start the following things are available on localhost:
 
-[CAdvisor](http://localhost:8080)
-[Prometheus](http://localhost:9090)
-[Grafana](fluent:fluentd@http://localhost:3000/login)
+ - [CAdvisor](http://localhost:8080)
+ - [Prometheus](http://localhost:9090)
+ - [Grafana](fluentt:fluent@http://localhost:3000/login)
 
 For the purposes of these tests only grafana is of immediate use. It includes a provisioned dashboard that tracks fluentd container cpu use, memory and total records processed.
