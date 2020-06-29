@@ -17,7 +17,7 @@ def write_logs(run_for, events_per_sec, id, output_type, path):
     base_path = Path(path)
     log_path = base_path / log_name
     handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=5000000, backupCount=5)
-  elif output_type == 'network':
+  elif output_type == 'push':
     raise Exception("Not implemented")
   else:
     raise Exception("Unknown output type")
@@ -54,7 +54,7 @@ if __name__ == "__main__":
   parser.add_argument('-n', '--num-writers', type=int, required=True, help='The number of log writers to spawn.')
   parser.add_argument('-r', '--run-for', type=int, required=True, help='Running time of the test in seconds.')
   parser.add_argument('-e', '--events-per-sec', type=int, required=True, help='Number of events to emit per second.')
-  parser.add_argument('-o', '--output-type', required=True, help='Kind of log output file|network')
+  parser.add_argument('-o', '--output-type', required=True, help='Kind of log output file|push')
   parser.add_argument('-p', '--path', default='srclogs', help='Path where logs are written.')
 
   args = parser.parse_args()
