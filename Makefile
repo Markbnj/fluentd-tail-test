@@ -2,6 +2,10 @@ SHELL := /usr/bin/env bash -e
 
 output_path := srclogs
 fluent_db_path := pos
+num_writers ?= 1
+run_for ?= 10
+events_per_sec ?= 50
+
 
 .PHONY: .setup
 .setup:
@@ -20,16 +24,29 @@ fluent_db_path := pos
 
 .PHONY: .build-fluentd
 .build-fluentd:
-	docker build -f Dockerfile.fluentd --rm --force-rm --tag fluentd:v1.10.4-debian-1.0-prom .
+	@docker build -f Dockerfile.fluentd --rm --force-rm --tag fluentd:v1.10.4-debian-1.0-prom .
 
 .PHONY: start
 start: .build-fluentd .setup
-	docker-compose up -d
+	@docker-compose up -d
 
 .PHONY: stop
 stop:
-	docker-compose down
+	@docker-compose down
 
-.PHONY: run-logs
-run-logs:
-	python3 bin/test_runner.py --num-writers 1 --run-for 300 --write-delay 1500 --output-type file --path srclogs
+.PHONY: run-logs-tail
+run-logs-tail:
+	@python3 bin/test_runner.py\
+	 --num-writers $(num_writers)\
+	 --run-for $(run_for)\
+	 --events-per-sec $(events_per_sec)\
+	 --output-type file\
+	 --path $(output_path)
+
+.PHONY: run-logs-push
+run-logs-push:
+	@python3 bin/test_runner.py\
+	 --num-writers $(num_writers)\
+	 --run-for $(run_for)\
+	 --events-per-sec $(events_per_sec)\
+	 --output-type push
