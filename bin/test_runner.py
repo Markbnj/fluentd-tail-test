@@ -9,7 +9,7 @@ import random
 import string
 
 
-def write_logs(run_for, events_per_sec, line_length, id, output_type, path):
+def write_logs(run_for_sec, events_per_sec, line_length, id, output_type, path):
   logger = logging.getLogger(__name__)
   logger.setLevel(logging.DEBUG)
   handler = None
@@ -35,18 +35,18 @@ def write_logs(run_for, events_per_sec, line_length, id, output_type, path):
   while True:
     logger.debug(log_line)
     line_count = line_count + 1
-    if time.time() - start_s > run_for:
+    if time.time() - start_s > run_for_sec:
       break
     time.sleep(write_delay / 1000000)
 
-  ran_for = time.time() - start_s
-  print(f'writer {os.getpid()} exiting; wrote {line_count} lines in {ran_for} seconds.')
+  ran_for_sec = time.time() - start_s
+  print(f'writer {os.getpid()} exiting; wrote {line_count} lines in {ran_for_sec} seconds.')
 
 
-def run_test(num_writers, run_for, events_per_sec, line_length, output_type, path):
+def run_test(num_writers, run_for_sec, events_per_sec, line_length, output_type, path):
   procs = []
   for i in range(num_writers):
-    p = multiprocessing.Process(target=write_logs, args=(run_for,events_per_sec,line_length,i,output_type,path))
+    p = multiprocessing.Process(target=write_logs, args=(run_for_sec,events_per_sec,line_length,i,output_type,path))
     p.start()
     procs.append(p)
   while [p.exitcode for p in procs if p.exitcode is None]:
@@ -56,7 +56,7 @@ def run_test(num_writers, run_for, events_per_sec, line_length, output_type, pat
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='Run a log write test using multiple writers')
   parser.add_argument('-n', '--num-writers', type=int, required=True, help='The number of log writers to spawn.')
-  parser.add_argument('-r', '--run-for', type=int, required=True, help='Running time of the test in seconds.')
+  parser.add_argument('-r', '--run-for-sec', type=int, required=True, help='Running time of the test in seconds.')
   parser.add_argument('-e', '--events-per-sec', type=int, required=True, help='Number of events to emit per second.')
   parser.add_argument('-l', '--line-length', type=int, required=True, help='Length of the test log lines.')
   parser.add_argument('-o', '--output-type', required=True, help='Kind of log output file|push')
@@ -64,4 +64,4 @@ if __name__ == "__main__":
 
   args = parser.parse_args()
   print(f'spawning log writers with args: {args}')
-  run_test(args.num_writers, args.run_for, args.events_per_sec, args.line_length, args.output_type, args.path )
+  run_test(args.num_writers, args.run_for_sec, args.events_per_sec, args.line_length, args.output_type, args.path )

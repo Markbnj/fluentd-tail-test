@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash -e
 output_path := srclogs
 fluent_db_path := pos
 num_writers ?= 1
-run_for ?= 10
+run_for_sec ?= 10
 events_per_sec ?= 50
 line_length ?= 100
 
@@ -38,7 +38,7 @@ stop:
 run-logs-tail:
 	@python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
-	 --run-for $(run_for)\
+	 --run-for $(run_for_sec)\
 	 --events-per-sec $(events_per_sec)\
 	 --line-length $(line_length)\
 	 --output-type file\
@@ -48,7 +48,7 @@ run-logs-tail:
 run-logs-push:
 	@python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
-	 --run-for $(run_for)\
+	 --run-for $(run_for_sec)\
 	 --events-per-sec $(events_per_sec)\
 	 --line-length $(line_length)\
 	 --output-type push
