@@ -5,7 +5,7 @@ fluent_db_path := pos
 num_writers ?= 1
 run_for ?= 10
 events_per_sec ?= 50
-
+line_length ?= 100
 
 .PHONY: .setup
 .setup:
@@ -40,6 +40,7 @@ run-logs-tail:
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for)\
 	 --events-per-sec $(events_per_sec)\
+	 --line-length $(line_length)\
 	 --output-type file\
 	 --path $(output_path)
 
@@ -49,4 +50,5 @@ run-logs-push:
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for)\
 	 --events-per-sec $(events_per_sec)\
+	 --line-length $(line_length)\
 	 --output-type push
