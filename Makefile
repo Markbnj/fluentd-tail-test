@@ -1,6 +1,5 @@
 SHELL := /usr/bin/env bash -e
 
-fluent_db_path := pos
 num_writers ?= 1
 run_for_sec ?= 10
 events_per_sec ?= 50
@@ -30,27 +29,12 @@ help:
 	. .venv/bin/activate &&\
 	pip install -r requirements.txt
 
-.PHONY: .setup
-.setup:
-	@if [ ! -d $(output_path) ]; then\
-		mkdir $(output_path);\
-		chmod 777 $(output_path);\
-	elif [ ! -z "$$(ls -A $(output_path))" ]; then\
-		rm -f $(output_path)/*;\
-	fi;\
-	if [ ! -d $(fluent_db_path) ]; then\
-		mkdir $(fluent_db_path);\
-		chmod 777 $(fluent_db_path);\
-	elif [ ! -z "$$(ls -A $(fluent_db_path))" ]; then\
-		rm -f $(fluent_db_path)/*;\
-	fi
-
 .PHONY: .build-fluentd
 .build-fluentd:
 	@docker build -f Dockerfile.fluentd --rm --force-rm --tag fluentd:v1.10.4-debian-1.0-prom .
 
 .PHONY: start
-start: .build-fluentd .setup
+start: .build-fluentd
 	@docker-compose up -d
 	@echo "Services running - access via the browser:"
 	@echo "CAdvisor at http://localhost:8080"
@@ -61,8 +45,18 @@ start: .build-fluentd .setup
 stop:
 	@docker-compose down
 
+.PHONY: .clean
+.clean:
+	@if [ -z "$(log_path)" ]; then echo "log_path unset"; exit 1; fi;\
+	if [ ! -d $(log_path) ]; then\
+		mkdir $(log_path);\
+		chmod 777 $(log_path);\
+	elif [ ! -z "$$(ls -A $(log_path))" ]; then\
+		rm -f $(log_path)/*;\
+	fi
+
 .PHONY: run-logs
-run-logs: .venv
+run-logs: .venv .clean
 	@. .venv/bin/activate &&\
 	export PYTHONPATH=$${PYTHONPATH}:./lib &&\
 	python3 bin/test_runner.py\
