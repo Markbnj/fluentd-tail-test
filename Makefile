@@ -5,7 +5,6 @@ run_for_sec ?= 10
 events_per_sec ?= 50
 line_length ?= 100
 test_type ?= file
-log_path ?= srclogs
 fluent_host ?= localhost
 fluent_port ?= 24224
 
@@ -20,7 +19,6 @@ help:
 	@echo "    events_per_sec, number of log lines to emit per second (50)"
 	@echo "    line_length, length in characters of the log lines (100)"
 	@echo "    test_type, 'push' for network, or 'file' for tail"
-	@echo "    log_path, output file path for tail tests (srclogs)"
 	@echo "    fluent_host, address/hostname of fluentd for push tests (localhost)"
 	@echo "    fluent_port, port of fluentd for push tests (24224)"
 
@@ -47,12 +45,11 @@ stop:
 
 .PHONY: .clean
 .clean:
-	@if [ -z "$(log_path)" ]; then echo "log_path unset"; exit 1; fi;\
-	if [ ! -d $(log_path) ]; then\
-		mkdir $(log_path);\
-		chmod 777 $(log_path);\
-	elif [ ! -z "$$(ls -A $(log_path))" ]; then\
-		rm -f $(log_path)/*;\
+	@if [ ! -d ./srclogs ]; then\
+		mkdir ./srclogs;\
+		chmod 777 ./srclogs;\
+	elif [ ! -z "$$(ls -A ./srclogs)" ]; then\
+		rm -f ./srclogs/*;\
 	fi
 
 .PHONY: run-logs
@@ -65,6 +62,6 @@ run-logs: .venv .clean
 	 --events-per-sec $(events_per_sec)\
 	 --line-length $(line_length)\
 	 --output-type $(test_type)\
-	 --log-path $(log_path)\
+	 --log-path srclogs\
 	 --fluent-server $(fluent_host)\
 	 --fluent-port $(fluent_port)
