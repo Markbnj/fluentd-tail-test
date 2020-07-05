@@ -1,52 +1,13 @@
 import argparse
-import pathlib
-import logging
-import logging.handlers
-import time
 import multiprocessing
-import os
-import random
-import string
-
-
-def write_logs(run_for_sec, events_per_sec, line_length, id, output_type, path):
-  logger = logging.getLogger(__name__)
-  logger.setLevel(logging.DEBUG)
-  handler = None
-
-  if output_type == 'file':
-    log_name = f"test-log-{id}.log"
-    base_path = pathlib.Path(path)
-    log_path = base_path / log_name
-    handler = logging.handlers.RotatingFileHandler(log_path, maxBytes=5000000, backupCount=5)
-  elif output_type == 'push':
-    raise Exception("Not implemented")
-  else:
-    raise Exception("Unknown output type")
-
-  handler.setFormatter(logging.Formatter('{"time":"%(asctime)s","log":"%(message)s"}'))
-  logger.addHandler(handler)
-
-  log_line = "".join(random.choice(string.ascii_lowercase) for i in range(line_length))
-
-  write_delay = 1000000/events_per_sec
-  start_s = time.time()
-  line_count = 0
-  while True:
-    logger.debug(log_line)
-    line_count = line_count + 1
-    if time.time() - start_s > run_for_sec:
-      break
-    time.sleep(write_delay / 1000000)
-
-  ran_for_sec = time.time() - start_s
-  print(f'writer {os.getpid()} exiting; wrote {line_count} lines in {ran_for_sec} seconds.')
+import time
+from genlogs import generate_logs
 
 
 def run_test(num_writers, run_for_sec, events_per_sec, line_length, output_type, path):
   procs = []
   for i in range(num_writers):
-    p = multiprocessing.Process(target=write_logs, args=(run_for_sec,events_per_sec,line_length,i,output_type,path))
+    p = multiprocessing.Process(target=generate_logs, args=(run_for_sec,events_per_sec,line_length,i,output_type,path))
     p.start()
     procs.append(p)
   while [p.exitcode for p in procs if p.exitcode is None]:
