@@ -1,3 +1,5 @@
-*logs
+srclogs
 pos
 .venv
+__pycache__
+*.pyc
