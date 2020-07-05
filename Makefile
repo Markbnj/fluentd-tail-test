@@ -34,6 +34,10 @@ line_length ?= 100
 .PHONY: start
 start: .build-fluentd .setup
 	@docker-compose up -d
+	@echo "Services running - access via the browser:"
+	@echo "CAdvisor at http://localhost:8080"
+	@echo "Prometheus at http://localhost:9090"
+	@echo "Grafana at http://localhost:3000/login (user:fluent password:fluent)"
 
 .PHONY: stop
 stop:
@@ -42,6 +46,7 @@ stop:
 .PHONY: run-logs-tail
 run-logs-tail: .venv
 	@. .venv/bin/activate &&\
+	export PYTHONPATH=$${PYTHONPATH}:./lib &&\
 	python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for_sec)\
@@ -53,6 +58,7 @@ run-logs-tail: .venv
 .PHONY: run-logs-push
 run-logs-push: .venv
 	@. .venv/bin/activate &&\
+	export PYTHONPATH=$${PYTHONPATH}:./lib &&\
 	python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for_sec)\
