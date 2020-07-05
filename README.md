@@ -15,6 +15,8 @@ Fluentd is configured to accept logs from tail and forward (network) sources, an
 
 CAadvisor and prometheus are not really profiling tools. In a production setup you'd be unlikely to be able to scrape often enough to capture data at a useful resolution for profiling. For the purpose of this test it works fine for a couple of reasons: 1) fluentd and the target are on the same network (i.e. connected to the same bridge), so the i/o portion of the scrape is about as fast as it gets, and overall it takes about .1s to scrape cadvisor; 2) I'm generating a constant load for a given period of time, and all I'm really interested in is the average cpu/memory use over that period; and lastly 3) it makes pretty nice graphs.
 
+By default I'm scraping fluentd and cadvisor every 5s, and using a 30s range on the dashboard rate queries. You can mess with those figures in [prometheus.yml](https://github.com/Markbnj/fluentd-tail-test/blob/master/conf/prometheus.yml) and [fluentd-monitor.json](https://github.com/Markbnj/fluentd-tail-test/blob/master/grafana/dashboards/fluentd-monitor.json).
+
 ## Use
 
 ```
