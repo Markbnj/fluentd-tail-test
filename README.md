@@ -1,8 +1,8 @@
 # fluentd-tail-test
 
-Provides a framework for profiling the cpu/memory utilization of [fluentd](https://www.fluentd.org/) in two common log source scenarios: 1) a setup in which containers log to stdout and fluentd tails the log files; and 2) a setup in which containers push logs in msgpack format directly to fluentd. In the code these are referred to as "tail" and "push" sources respectively.
+Provides a framework for profiling the cpu/memory utilization of [fluentd](https://www.fluentd.org/) in two common log source scenarios: 1) a setup in which containers log to stdout and fluentd tails the log files; and 2) a setup in which containers push logs in msgpack format directly to fluentd. In the code these are referred to as "file" and "push" output types respectively.
 
-Fluentd is configured to accept logs from tail and forward sources, and to discard all records so that we can focus on the resource costs of acquiring the log lines. CAdvisor is installed to monitor the fluentd container resource usage. Prometheus is installed and configured to scrape cadvisor. Finally grafana is installed and configured with a provisioned dashboard that shows the primary metrics of interest:
+Fluentd is configured to accept logs from tail and forward (network) sources, and to discard all records so that we can focus on the resource costs of acquiring the log lines. CAdvisor is installed to monitor the fluentd container resource usage. Prometheus is installed and configured to scrape cadvisor. Finally grafana is installed and configured with a provisioned dashboard that shows the primary metrics of interest:
 
  - fluentd percent cpu usage
  - fluentd memory usage in bytes
