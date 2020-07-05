@@ -7,6 +7,11 @@ run_for_sec ?= 10
 events_per_sec ?= 50
 line_length ?= 100
 
+.venv:
+	@python3 -m venv .venv &&\
+	. .venv/bin/activate &&\
+	pip install -r requirements.txt
+
 .PHONY: .setup
 .setup:
 	@if [ ! -d $(output_path) ]; then\
@@ -35,8 +40,9 @@ stop:
 	@docker-compose down
 
 .PHONY: run-logs-tail
-run-logs-tail:
-	@python3 bin/test_runner.py\
+run-logs-tail: .venv
+	@. .venv/bin/activate &&\
+	python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for_sec)\
 	 --events-per-sec $(events_per_sec)\
@@ -45,8 +51,9 @@ run-logs-tail:
 	 --path $(output_path)
 
 .PHONY: run-logs-push
-run-logs-push:
-	@python3 bin/test_runner.py\
+run-logs-push: .venv
+	@. .venv/bin/activate &&\
+	python3 bin/test_runner.py\
 	 --num-writers $(num_writers)\
 	 --run-for $(run_for_sec)\
 	 --events-per-sec $(events_per_sec)\
