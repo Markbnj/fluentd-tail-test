@@ -11,6 +11,10 @@ Fluentd is configured to accept logs from tail and forward (network) sources, an
 
  Uses [fluent-logger-python](https://github.com/fluent/fluent-logger-python) to handle the push path.
 
+## Notes on metrics resolution
+
+CAadvisor and prometheus are not really profiling tools. In a production setup you'd be unlikely to be able to scrape often enough to capture data at a useful resolution for profiling. For the purpose of this test it works fine for a couple of reasons: 1) fluentd and the target are on the same network (i.e. connected to the same bridge), so the i/o portion of the scrape is about as fast as it gets, and overall it takes about .1s to scrape cadvisor; 2) I'm generating a constant load for a given period of time, and all I'm really interested in is the average cpu/memory use over that period; and lastly 3) it makes pretty nice graphs.
+
 ## Use
 
 ```
