@@ -26,7 +26,6 @@ services:
     - fluent-test
     volumes:
     - ./srclogs:/srclogs:ro
-    - ./pos:/pos
     - ./conf/fluent.conf:/fluentd/etc/fluent.conf:ro
   prometheus:
     image: prom/prometheus:latest
