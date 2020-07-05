@@ -52,8 +52,7 @@ run-logs-tail: .venv
 	 --run-for $(run_for_sec)\
 	 --events-per-sec $(events_per_sec)\
 	 --line-length $(line_length)\
-	 --output-type file\
-	 --path $(output_path)
+	 --output-type file
 
 .PHONY: run-logs-push
 run-logs-push: .venv

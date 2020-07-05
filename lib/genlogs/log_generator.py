@@ -24,15 +24,15 @@ def __get_fluent_handler(host="localhost", port=24224):
   return handler
 
 
-def generate_logs(run_for_sec, events_per_sec, line_length, id, output_type, path):
+def generate_logs(run_for_sec, events_per_sec, line_length, id, output_type, log_path, fluent_server, fluent_port):
   logger = logging.getLogger(__name__)
   logger.setLevel(logging.INFO)
   handler = None
 
   if output_type == "file":
-    handler = __get_file_handler(path, id)
+    handler = __get_file_handler(log_path, id)
   elif output_type == "push":
-    handler = __get_fluent_handler()
+    handler = __get_fluent_handler(fluent_server, fluent_port)
   else:
     raise Exception("Unknown output type")
 
